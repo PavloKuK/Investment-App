@@ -1,0 +1,16 @@
+{% extends "datatable_layout.html" %}
+
+{% block title %} {{title}} {% endblock title %}
+{% block header %} {{header}} {% endblock header %}
+
+{% block content %}
+
+Record inserted in Sold to Table
+
+{% for customer_id in result.getlist("customer_id") %}
+   {% for product_id in result.getlist("product_id") %}
+      Customer id: {{customer_id}}, Product id: {{product_id}}
+   {% endfor %}
+{% endfor %}
+
+{% endblock content %}

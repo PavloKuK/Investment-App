@@ -1,0 +1,35 @@
+{% extends "datatable_layout.html" %}
+
+{% block title %} {{title}} {% endblock title %}
+{% block header %} {{header}} {% endblock header %}
+
+{% block content %}
+<table>
+   <thead>
+      <tr>
+         {% for key, value in companies[0].items() %}
+         {% if key != '_sa_instance_state' %}
+         <th>
+            {{key}}
+         </th>
+         {% endif %}
+         {% endfor %}
+
+      </tr>
+   </thead>
+   <tbody>
+      {% for element in companies %}
+      <tr>
+         {% for key, value in element.items() %}
+         {% if key != '_sa_instance_state' %}
+         <td>
+            {{ value }}
+         </td>
+         {% endif %}
+         {% endfor %}
+      </tr>
+      {% endfor %}
+   </tbody>
+</table>
+
+{% endblock content %}

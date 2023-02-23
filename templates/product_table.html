@@ -1,0 +1,32 @@
+{% extends "datatable_layout.html" %}
+
+{% block title %} {{title}} {% endblock title %}
+{% block header %} {{header}} {% endblock header %}
+
+{% block content %}
+
+<table>
+   <tr>
+      {% for key, value in products[0].items() %}
+      {% if key != '_sa_instance_state' %}
+      <th>
+         {{key}}
+      </th>
+      {% endif %}
+      {% endfor %}
+
+   </tr>
+   {% for element in products %}
+   <tr>
+      {% for key, value in element.items() %}
+      {% if key != '_sa_instance_state' %}
+      <td>
+         {{ value }}
+      </td>
+      {% endif %}
+      {% endfor %}
+   </tr>
+   {% endfor %}
+</table>
+
+{% endblock content %}

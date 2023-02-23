@@ -1,0 +1,16 @@
+{% extends "datatable_layout.html" %}
+
+{% block title %} {{title}}  {% endblock title %}
+{% block header %} {{header}}  {% endblock header %}
+
+{% block content %} 
+
+<p>
+
+   <ul>
+      {% for key, value in companyInfo.items() %}
+         <li>{{key}}: {{value}}</li>
+      {% endfor%}
+   </ul>
+</p>
+{% endblock content %}
