@@ -2,6 +2,9 @@ import customer as customer_db
 import json
 import requests
 import urllib.request
+import csv
+import pandas as pd
+# from sklearn.datasets import load_iris
 
 from sqlalchemy.orm import sessionmaker
 
@@ -34,16 +37,18 @@ def simple_form():
       
       companyInfo = json.loads(data)
       
-      url1 = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol" + result["name"] + "&apikey=" + key
-      r1 = requests.get(url1)
-      data1 = urllib.request.urlopen(url1).read().decode()
+      urlCsv = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=" + result["name"] + "&apikey=" + key + "&datatype=csv"
       
-      companyInfo1 = json.loads(data1)
+      frame = pd.read_csv(urlCsv)
+      
+      frame.to_csv('static/data/monthly_adjusted.csv')
+      
+      print(frame.to_string())        
       
       with open('static/data/company_overview.json', 'w') as file:
          file.write(data)
       
-      return render_template('lookupAfter.html', title= result["name"] + " overview", header=result["name"] + " overview", result=result, companyInfo=companyInfo, companyInfo1=companyInfo1)
+      return render_template('lookupAfter.html', title= result["name"] + " overview", header=result["name"] + " overview", result=result, companyInfo=companyInfo)
    return render_template('lookup.html', title="Investment App", header="Investment App", form=form)
 
 @app.route('/manuals', methods=['GET', 'POST'])
