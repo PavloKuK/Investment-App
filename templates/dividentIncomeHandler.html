@@ -1,0 +1,13 @@
+{% extends "datatable_layout.html" %}
+
+{% block title %} {{title}}  {% endblock title %}
+{% block header %} {{header}}  {% endblock header %}
+
+{% block content %} 
+
+<p>
+    <br/>
+    The income for {{result["name"]}} is ${{dividentIncome}} for past year.<br/>
+    Income for 100 shares would be ${{hundredShares}} per year.
+</p>
+{% endblock content %}
