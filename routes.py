@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 
 from company_lookup import Lookup
 from graph_lookup import CreateGraph
-from flask import Flask, render_template, url_for, request, redirect, jsonify
+from flask import Flask, render_template, url_for, request, redirect, jsonify, session
 # import numpy as np
 # import matplotlib.pyplot as plt
 import pandas as pd
@@ -113,11 +113,10 @@ def graph_form():
       )
       fig = go.Figure(data=data, layout = layout)
       fig.write_html("venv/close.html")
-      fig.write_image("venv/static/data/graph.png")
-
-      file_pathway = os.path.join("venv/static/data/graph.png")
+      fig.write_image("venv/static/photo/graph.png")
       
-      return render_template('rate_graphAfter.html', title= result["name"] + " Graph", header=result["name"] + " Graph", result=result, companyInfo=companyInfo, user_image = file_pathway)
+      
+      return render_template('rate_graphAfter.html', title= result["name"] + " Graph", header=result["name"] + " Graph", result=result, companyInfo=companyInfo)
    return render_template('rate_graph.html', title="Investment App", header="Investment App", graph_form=graph_form)
 
 if __name__ == "__main__":
