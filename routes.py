@@ -11,12 +11,9 @@ from sqlalchemy.orm import sessionmaker
 from company_lookup import Lookup
 from graph_lookup import CreateGraph
 from flask import Flask, render_template, url_for, request, redirect, jsonify, session
-# import numpy as np
-# import matplotlib.pyplot as plt
 import pandas as pd
 import plotly
 import plotly.graph_objs as go
-# import plotly.express as px
 import dataframe_image as dfi
 
 
@@ -171,48 +168,6 @@ def manual():
 @app.route("/favicon.ico")
 def favicon():
     return render_template('close.html', title="User Manuals", header="User Manuals")
-
-@app.route('/rate_graph', methods=['GET', 'POST'])
-def graph_form():
-   graph_form = CreateGraph()
-   form = graph_form
-   
-   if graph_form.is_submitted():
-      
-      result = request.form
-
-      urlCsv = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=" + result["name"] + "&apikey=" + key + "&datatype=csv"
-      
-      companyInfo = pd.read_csv(urlCsv)
-      
-      companyInfo.to_csv('venv/static/data/monthly_adjusted.csv')
-
-      # Create a trace  ############################### GRAB DATA FROM LAST 12 MONTHS
-      data = [go.Scatter(
-         x = companyInfo['timestamp'], 
-         y = companyInfo['close'],
-      )]
-      layout = go.Layout(
-         xaxis = dict(
-            title='TimeStamps',
-         ),
-         yaxis = dict(
-            title = 'Share Price',
-         )
-      )
-      fig = go.Figure(data=data, layout = layout)
-      # fig.write_html("venv/close.html")
-      fig.write_image("venv/static/photo/graph.png")
-      
-      graph_table = pd.read_csv(urlCsv, usecols=['timestamp', 'high', 'close'], nrows=12)
-      # print(graph_table)
-      # graph_table.to_html("venv/templates/monthly_rate_table.html")
-      # html_file = graph_table.to_csv("venv/static/data/monthly_rate_table.csv")
-      df_styled = graph_table.style.background_gradient()
-      dfi.export(df_styled, "venv/static/photo/monthly_rate_table.png")
-
-      return render_template('rate_graphAfter.html', title= result["name"] + " Graph", header=result["name"] + " Monthly Rates Graph", result=result, companyInfo=companyInfo)
-   return render_template('rate_graph.html', title="Investment App", header="Investment App", graph_form=graph_form)
 
 if __name__ == "__main__":
    app.run(debug=True) 
