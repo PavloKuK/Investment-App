@@ -1,51 +1,62 @@
-{% extends "datatable_layout.html" %} 
-
-{% block title %} Signup {% endblock title %}
+{% block title %}{% endblock title %}
 
 {% block content %}
-<form method="POST">
-  <h3 align ="center">Sign Up</h3>
-  <div class="form-group">
-    <label for="email"> Email Address</label>
-    <input
-      type="email"
-      class="form-control"
-      id="email"
-      name="email"
-      placeholder="Enter Your Email"
-    />
+
+<head>
+  <style>
+
+    body{
+      background-image: linear-gradient(180deg, rgb(0, 0, 0), rgb(0, 60, 255));
+      color:floralwhite;
+      font-family:Arial, Helvetica, sans-serif;
+      padding:2rem;
+      margin: 0;
+      min-height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <form method="POST">
+    <h3>Sign Up</h3>
+    <div>
+      {{form.name.label}}
+      {{form.name}}
+    </div>
+  </br>
+    <div>
+      {{form.email.label}}
+      {{form.email}}
+    </div>
+  </br>
+    <div>
+      {{form.bank.label}}
+      {{form.bank}}
+    </div>
+  </br>
+    <div>
+      {{form.address.label}}
+      {{form.address}}
+    </div>
+  </br>
+    <div>
+      {{form.state.label}}
+      {{form.state}}
+    </div>
+  </br>
+  <div>
+    {{form.password.label}}
+    {{form.password}}
   </div>
-  <div class="form-group">
-    <label for="firstName">First Name</label>
-    <input
-      type="text"
-      class="form-control"
-      id="firstName"
-      name="firstName"
-      placeholder="Enter Your First Name"
-    />
+  </br>
+  <div>
+    {{form.confirmPassword.label}}
+    {{form.confirmPassword}}
   </div>
-  <div class="form-group">
-    <label for="password1">Password</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password1"
-      name="password1"
-      placeholder="Enter password"
-    />
-  </div>
-  <div class="form-group">
-    <label for="password2">Password (Confirm)</label>
-    <input
-      type="password"
-      class="form-control"
-      id="password2"
-      name="password2"
-      placeholder="Confirm password"
-    />
-  </div>
-  <br />
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+  </br>
+    <div>
+      {{form.submit}}
+    </div>
+  </form>
+</body>
 {% endblock %}

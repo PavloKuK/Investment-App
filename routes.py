@@ -12,9 +12,11 @@ import dataframe_image as dfi
 
 from sqlalchemy.orm import sessionmaker
 
-from company_lookup import Lookup
-from flask import Flask, render_template, url_for, request, redirect, jsonify
+from company_lookup import Lookup, Login, SignUp
+from flask import Flask, render_template, url_for, request, redirect, jsonify, flash
 
+Session = sessionmaker(bind = customer_db.engine)
+session = Session()
 
 app = Flask(__name__)
 
@@ -23,13 +25,83 @@ app.config["SECRET_KEY"]='why_a_duck?'
 key0 = "PUKOSP3TWUJWMXBG"
 key1 = "4ELFTP653JW7XT9Z"
 key2 = "QQAF8NRUKEMZTX1T"
+key3 = "EG17YJVUNT4E43P7"
 
-Email = ""
-Password = ""
+Email = "email"
+Password = "password"
 
 @app.route("/")
 def myrediret():
-   return redirect(url_for('simple_form'))
+   return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+   
+   form = Login()
+   
+   if form.is_submitted():
+      print("Message")
+      if form.submit.data:
+         result = request.form
+        
+         print(result["email"])
+         print(result["password"])
+        
+         try:
+            newLogin = session.query(customer_db.Credentials).first()
+            print(Password + Password)
+           
+            if result["email"] == newLogin.email and result["password"] == newLogin.password:
+               print(Email + Password)
+               return redirect(url_for('simple_form'))
+           
+         except AttributeError:
+            print(AttributeError)
+           
+      if form.signup.data:
+         print("16151515+1")
+         return redirect(url_for('signup'))
+      
+   return render_template('login.html', title="Login", header="Login", form=form) 
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+   form = SignUp()
+   
+   if form.is_submitted():
+      
+      result = request.form
+      
+      try:
+         user = session.query(customer_db.Account).first()
+         newPassword = session.query(customer_db.Credentials).first()
+         
+         if result["password"] == result["confirmPassword"]:
+            user.name = result["name"]
+            user.email = result["email"]
+            user.bank = result["bank"]
+            user.address = result["address"]
+            user.state = result["state"]
+            
+            newPassword.email = result["email"]
+            newPassword.password = result["password"]
+         
+            session.commit()
+         
+      except AttributeError:
+         
+         if result["password"] == result["confirmPassword"]:
+             
+            customer = customer_db.Account(name = result["name"], email = result["email"], bank = result["bank"], address = result["address"], state = result["state"])
+            credentials = customer_db.Credentials(email = result["email"], password = result["password"])
+            session.add(customer)
+            session.add(credentials)
+            session.commit()
+            session.flush()
+            
+            return redirect(url_for('simple_form'))
+            
+   return render_template('signup.html', title="Signup", header="Signup", form=form)
 
 @app.route('/lookup', methods=['GET', 'POST'])
 def simple_form():
@@ -160,14 +232,6 @@ def simple_form():
 @app.route('/manuals', methods=['GET', 'POST'])
 def manual():
    return render_template('manuals.html', title="User Manuals", header="User Manuals")
-
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-   return render_template('signup.html', title="Signup", header="Signup")
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-   return render_template('login.html', title="Login", header="Login")
    
 if __name__ == "__main__":
    app.run(debug=True) 

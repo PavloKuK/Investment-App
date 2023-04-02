@@ -1,28 +1,41 @@
-{% extends "datatable_layout.html" %}
-{% block title %}Login{% endblock title %} {% block content %}
-<form action="" method="POST">
-    <h3 align="center">Login</h3>
-    <div class="form-group">
-      <label for="email"> Email Address</label>
-      <input
-        type="email"
-        class="form-control"
-        id="email"
-        name="email"
-        placeholder="Enter email"
-      />
+{% block title %}{% endblock title %} {% block content %}
+
+<head>
+  <style>
+    body{
+      background-image: linear-gradient(180deg, rgb(0, 0, 0), rgb(0, 60, 255));
+      color:floralwhite;
+      font-family:Arial, Helvetica, sans-serif;
+      padding:2rem;
+      margin: 0;
+      min-height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="" method="POST">
+    <h3>Login</h3>
+    <div>
+      {{form.email.label}}
+      {{form.email}}
     </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input
-        type="password"
-        class="form-control"
-        id="password"
-        name="password"
-        placeholder="Enter password"
-      />
+  </br>
+    <div>
+      {{form.password.label}}
+      {{form.password}}
     </div>
-    <br />
-    <button type="login" class="btn btn-primary">login</button>
+  </br>
+    <div>
+      {{form.submit()}}
+    </div>
+
+    <p>Or</p>
+
+    <div>
+      {{form.signup.label}}
+      {{form.signup}}
+    </div>
   </form>
+</body>
 {% endblock content %}

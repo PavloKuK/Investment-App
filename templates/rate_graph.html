@@ -1,0 +1,23 @@
+{% extends "datatable_layout.html" %}
+
+{% block title %} {{title}}  {% endblock title %}
+{% block header %} {{header}}  {% endblock header %}
+
+{% block content %} 
+<form action="{{url_for('graph_form')}}" method="post">
+   {{ graph_form.csrf_token }}
+
+   <div>
+      {{graph_form.name.label}}
+      {{graph_form.name}}
+   </div>
+
+   
+ 
+   <!-- SUBMIT -->
+   <div>
+      {{graph_form.submit()}}
+   </div>
+</form>
+
+{% endblock content %}
