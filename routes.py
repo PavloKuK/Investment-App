@@ -9,10 +9,11 @@ from itertools import islice
 import plotly
 import plotly.graph_objs as go
 import dataframe_image as dfi
+import win32api
 
 from sqlalchemy.orm import sessionmaker
 
-from company_lookup import Lookup, Login, SignUp
+from company_lookup import Lookup, Login, SignUp, BankTransfer
 from flask import Flask, render_template, url_for, request, redirect, jsonify, flash
 
 Session = sessionmaker(bind = customer_db.engine)
@@ -44,22 +45,25 @@ def login():
       if form.submit.data:
          result = request.form
         
-         print(result["email"])
-         print(result["password"])
+         # print(result["email"])
+         # print(result["password"])
         
          try:
             newLogin = session.query(customer_db.Credentials).first()
             print(Password + Password)
            
             if result["email"] == newLogin.email and result["password"] == newLogin.password:
-               print(Email + Password)
+               # print(Email + Password + Email)
+               win32api.MessageBox(0, 'alert', 'alert')
                return redirect(url_for('simple_form'))
            
          except AttributeError:
+            win32api.MessageBox(0, 'alert', 'alert', 0x00001000)
+            print("6516565154165151611111111111111111")
             print(AttributeError)
            
       if form.signup.data:
-         print("16151515+1")
+         # print("16151515+1")
          return redirect(url_for('signup'))
       
    return render_template('login.html', title="Login", header="Login", form=form) 
@@ -75,6 +79,7 @@ def signup():
       try:
          user = session.query(customer_db.Account).first()
          newPassword = session.query(customer_db.Credentials).first()
+         newBank = session.query(customer_db.Balance).first()
          
          if result["password"] == result["confirmPassword"]:
             user.name = result["name"]
@@ -85,6 +90,8 @@ def signup():
             
             newPassword.email = result["email"]
             newPassword.password = result["password"]
+            
+            newBank.bank = result["bank"]
          
             session.commit()
          
@@ -94,8 +101,10 @@ def signup():
              
             customer = customer_db.Account(name = result["name"], email = result["email"], bank = result["bank"], address = result["address"], state = result["state"])
             credentials = customer_db.Credentials(email = result["email"], password = result["password"])
+            newBank = customer_db.Balance(bank = result["bank"], amount = 0.0)
             session.add(customer)
             session.add(credentials)
+            session.add(newBank)
             session.commit()
             session.flush()
             
@@ -228,6 +237,39 @@ def simple_form():
 
          return render_template('rate_graphAfter.html', title= result["name"] + " Graph", header=result["name"] + " Stock Rates Graph Over Time", result=result, companyInfo=companyInfo)
    return render_template('lookup.html', title="Investment App", header="Investment App", form=form)
+
+@app.route('/bank-transfer', methods=['GET', 'POST'])
+def bankTransfer():
+   form = BankTransfer()
+   
+   if form.is_submitted():
+      
+      result = request.form
+      
+      money = result["amount"]
+   
+      
+      try:
+         money = float(money)
+         
+         balance = session.query(customer_db.Balance).first()
+         
+         balance.amount = balance.amount + money
+         
+         session.commit()
+         
+         print(balance.amount)
+         
+         print("Money is a number")
+        
+      except ValueError:
+         print(ValueError)
+         print("You have to enter a number")
+            
+      
+      print(money)
+   
+   return render_template('bank-transfer.html', title = "Bank", header = "Bank", form=form)
 
 @app.route('/manuals', methods=['GET', 'POST'])
 def manual():

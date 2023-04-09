@@ -26,6 +26,11 @@ class Credentials(Base):
     email = Column(String)
     password = Column(String)
    
+class Balance(Base):
+    __tablename__ = 'balance'
+    key = Column(Integer, primary_key = True)
+    bank = Column(String)
+    amount = Column(Float)
    
 Base.metadata.create_all(engine)
    
