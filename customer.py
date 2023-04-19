@@ -32,5 +32,20 @@ class Balance(Base):
     bank = Column(String)
     amount = Column(Float)
    
+class Holdings(Base):
+    __tablename__ = 'holdings'
+    key = Column(Integer, primary_key = True)
+    name = Column(String)
+    value = Column(Float)
+    gain = Column(Float)
+    
+class Portfolio(Base):
+    __tablename__ = 'portolio'
+    key = Column(Integer, primary_key = True)
+    value = Column(Float)   #The current value of all companies a customer has invested
+    gains = Column(Float)   #The change in value of all companies since shares were purchased in $ amount
+    returns = Column(Float) #The change in value of all companies since shares were purchased in % amount
+    dividents = Column(Float) #The amount of dividents that have been paid out to the customer since the stock purchase
+
 Base.metadata.create_all(engine)
    
