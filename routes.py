@@ -10,11 +10,13 @@ import plotly
 import plotly.graph_objs as go
 import dataframe_image as dfi
 import win32api
+from objectFile import Company
 
 from sqlalchemy.orm import sessionmaker
 
 from company_lookup import Lookup, Login, SignUp, BankTransfer
 from flask import Flask, render_template, url_for, request, redirect, jsonify, flash
+
 
 Session = sessionmaker(bind = customer_db.engine)
 session = Session()
@@ -30,6 +32,8 @@ key3 = "EG17YJVUNT4E43P7"
 
 Email = "email"
 Password = "password"
+
+company = Company("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
 
 @app.route("/")
 def myrediret():
@@ -50,15 +54,15 @@ def login():
         
          try:
             newLogin = session.query(customer_db.Credentials).first()
-            print(Password + Password)
+            # print(Password + Password)
            
             if result["email"] == newLogin.email and result["password"] == newLogin.password:
                # print(Email + Password + Email)
-               win32api.MessageBox(0, 'alert', 'alert')
+               # win32api.MessageBox(0, 'alert', 'alert')
                return redirect(url_for('simple_form'))
            
          except AttributeError:
-            win32api.MessageBox(0, 'alert', 'alert', 0x00001000)
+            # win32api.MessageBox(0, 'alert', 'alert', 0x00001000)
             print("6516565154165151611111111111111111")
             print(AttributeError)
            
@@ -131,7 +135,78 @@ def simple_form():
          with open('static/data/company_overview.json', 'w') as file:
             file.write(data)
             
-         return render_template('lookupAfter.html', title= result["name"] + " overview", header=result["name"] + " overview", result=result, companyInfo=companyInfo)
+         for key, value in companyInfo.items():
+            
+            if key == "AssetType":
+               company.assetType = value
+               
+            elif key == "Name":
+               company.name = value
+               
+            elif key == "Description":
+               company.description = value
+               
+            elif key == "Exchange":
+               company.exchange = value
+               
+            elif key == "Country":
+               company.country = value
+            
+            elif key == "Sector":
+               company.sector = value
+               
+            elif key == "Industry":
+               company.industry = value
+               
+            elif key == "Address":
+               company.address = value
+               
+            elif key == "MarketCapitalization":
+               company.marketCapitalization = value
+               
+            elif key == "DividendYield":
+               company.dividentYield = value
+               
+            elif key == "PERatio":
+               company.peratio = value
+               
+            elif key == "EPS":
+               company.eps = value
+               
+            elif key == "Beta":
+               company.beta = value
+               
+            elif key == "52WeekHigh":
+               company.weekHigh = value
+               
+            elif key == "52WeekLow":
+               company.weekLow = value
+               
+            elif key == "50DayMovingAverage":
+               company.fiftyDayMovingAverage = value
+               
+            elif key == "200DayMovingAverage":
+               company.twoHundredDayMovingAverage = value
+            
+         
+         return render_template('lookupAfter.html', result = result, companyInfo = companyInfo,
+         assetType = company.assetType,
+         name = company.name,
+         description = company.description,
+         exchange = company.exchange,
+         country = company.country,
+         sector = company.sector,
+         industry = company.industry,
+         address = company.address,
+         marketCapitalization = company.marketCapitalization,
+         dividentYield = company.dividentYield,
+         peratio = company.peratio,
+         eps = company.eps,
+         beta = company.beta,
+         weekHigh = company.weekHigh,
+         weekLow = company.weekLow,
+         fiftyDayMovingAverage = company.fiftyDayMovingAverage,
+         twoHundredDayMovingAverage = company.twoHundredDayMovingAverage)
       
       
       if result["purpose"] == "Divident Income":
@@ -266,7 +341,6 @@ def bankTransfer():
          print(ValueError)
          print("You have to enter a number")
             
-      
       print(money)
    
    return render_template('bank-transfer.html', title = "Bank", header = "Bank", form=form)
