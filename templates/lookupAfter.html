@@ -5,12 +5,89 @@
 
 {% block content %} 
 
-<p>
 
-   <ul>
-      {% for key, value in companyInfo.items() %}
-         <li>{{key}}: {{value}}</li>
-      {% endfor%}
-   </ul>
-</p>
+<div className = "data">
+
+   <h2 class = "Header">{{name}}<h2>
+   <small>{{description}}</small>
+   </br>
+   Profile
+
+   <table style="width:40%; margin-top:10px; margin-left:10px; font-size: 14px; background-color: #bde9ba; border: none">
+      <tr>
+        <td>Asset Type</td>
+        <td>{{assetType}}</td>
+      </tr>
+      <tr>
+        <td>Exchange</td>
+        <td>{{exchange}}</td>
+      </tr>
+      <tr>
+         <td>Country</td>
+         <td>{{country}}</td>
+       </tr>
+       <tr>
+         <td>Sector</td>
+         <td>{{sector}}</td>
+       </tr>
+       <tr>
+         <td>Industry</td>
+         <td>{{industry}}</td>
+       </tr>
+       <tr>
+         <td>Address</td>
+         <td>{{address}}</td>
+       </tr>
+    </table> 
+
+   </br>
+   </br>
+   Price
+
+   <table style="width:40%; margin-top:10px; margin-left:10px; font-size: 14px; background-color: #bde9ba; border: none">
+      <tr>
+        <td>Capitalization</td>
+        <td>{{marketCapitalization}}</td>
+      </tr>
+       <tr>
+         <td>52 week randge</td>
+         <td>${{weekLow}} - ${{weekHigh}}</td>
+       </tr>
+       <tr>
+         <td>Industry</td>
+         <td>{{industry}}</td>
+       </tr>
+       <tr>
+         <td>50 day average</td>
+         <td>{{fiftyDayMovingAverage}}</td>
+       </tr>
+       <tr>
+         <td>200 day average</td>
+         <td>{{twoHundredDayMovingAverage}}</td>
+       </tr>
+    </table> 
+
+   </br>
+   </br>
+   Technical Indicators
+
+   <table style="width:40%; margin-top:10px; margin-left:10px; font-size: 14px; background-color: #bde9ba; border: none">
+      <tr>
+         <td>Divident Yield</td>
+         <td>{{dividentYield}}</td>
+       </tr>
+      <tr>
+         <td>PERation</td>
+         <td>{{peratio}}</td>
+       </tr>
+       <tr>
+         <td>EPS</td>
+         <td>{{eps}}</td>
+       </tr>
+       <tr>
+         <td>Beta</td>
+         <td>{{beta}}</td>
+       </tr>
+    </table> 
+</div>
 {% endblock content %}
