@@ -1,19 +1,65 @@
 body{
-  background-color:rgb(72, 184, 188);
-  color:rgb(0, 16, 35);
+  background-image: linear-gradient(180deg, rgb(0, 0, 0), rgb(0, 60, 255));
+  color:floralwhite;
   font-family:Arial, Helvetica, sans-serif;
   padding:2rem;
 }
-div, p{
-  padding: 0.5rem;
-  margin: 0.5rem;
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+}
+/* https://www.w3schools.com/howto/howto_css_list_without_bullets.asp */ 
+/* old style might be cached Ctrl-Shift-R   */
+.nobullet {
+  list-style-type: none; /* Remove bullets */
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margins */
 }
 .error{
   background-color: darksalmon;
   color: darkred;
 }
-ul.no_bullets {
-  list-style-type: none; /* Remove bullets */
+td{
+ background-image: linear-gradient(180deg, rgb(0, 0, 0), rgb(0, 60, 255));
+ color:floralwhite;
+ border: 2px solid floralwhite;
+ padding-left: 1rem;
+ padding-right: 1rem;
+} 
+th{
+ background-color: floralwhite;
+ color: rgb(0, 0, 0);
+ border: 2px solid darkslategray;
+ padding-left: 1rem;
+ padding-right: 1rem;
+}
+.nav {
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
+.nav li {
+display: inline-block;
+width: 6rem;
+}
+.nav li a {
+display: block;
+background-color: floralwhite;
+color: darkslategray;
+text-align: center;
+padding-top: 5px;
+padding-bottom: 5px;
+text-decoration: none;
+border-color:darkolivegreen;
+border-width: 3px;
+border-style: solid;
+}
+
+.nav li a:hover {
+background-color:white;
+color: black;
+font-weight: bold;
 }
 .center{
   display: block;
@@ -21,3 +67,10 @@ ul.no_bullets {
   margin-right: auto;
   width: 50%;
 }
+ul.no_bullets {
+  list-style-type: none; 
+}
+div, p{
+  padding: 0.5rem;
+  margin: 0.5rem;
+} 
