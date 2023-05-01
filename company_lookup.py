@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, StringField, FloatField, SelectMultipleField, SelectField, RadioField
+from wtforms import SubmitField, StringField, FloatField, SelectMultipleField, SelectField, RadioField, IntegerField
 from wtforms.validators import InputRequired, Length, ValidationError
 
 companyNames = []
 
+# with open('venv/static/data/listing_status.csv', 'r') as file:
 with open('static/data/listing_status.csv', 'r') as file:
     for line in file:
         if line.strip():
@@ -16,7 +17,7 @@ with open('static/data/listing_status.csv', 'r') as file:
 
 
 class Lookup(FlaskForm):
-    name = SelectField("Pick a company", choices=companyNames)
+    name = SelectField("Pick a company", choices=companyNames)  #CAN GET RID OF BUY SHARES RADIO BUTTON
     purpose = RadioField(u'Pick what information you want displayed',
                          choices=[('General Overview', 'General Overview'),
                                   ('Divident Income', 'Divident Income'),
@@ -64,3 +65,20 @@ class BankTransfer(FlaskForm):
                         [InputRequired(message="You have to enter amount of money you want to transfer")])
     
     submit = SubmitField("Submit")
+
+class BuyShares(FlaskForm):
+    name = SelectField("Pick a company", choices=companyNames)
+
+    submit = SubmitField("Submit")
+
+    # investmentAmount = IntegerField("Investment Amount", validators=
+                        # [InputRequired(message="You have to enter amount of money you would like to invest in the company")])
+
+    numberOfShares = IntegerField("Number of Shares", validators=
+                        [InputRequired(message="You have to enter a valid amount of share you would like to purchase")])
+
+# class AddToHoldings(FlaskForm):
+#     purchaseAmount = IntegerField("Amount", validators=
+#                         [InputRequired(message="You have to enter amount of money you want to invest in the company")])
+
+#     Submit = SubmitField("Submit")

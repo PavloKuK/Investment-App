@@ -1,0 +1,29 @@
+{% extends "datatable_layout.html" %}
+
+{% block title %} {{title}}  {% endblock title %}
+{% block header %} {{header}}  {% endblock header %}
+
+{% block content %} 
+<p>
+   <div style="text-align: right;">Your current balance is <b>${{moneyAmt}}</b></div>
+
+   You have purchased a share!
+   <h3>The Current Value Gain is:</h3>
+   <h2><b>${{daily_price_close}}</b></h2>   
+
+   <div>
+      The type of asset the company, {{name}}, sells is <b>{{share_type}}</b>.
+   </div>
+
+   <div>
+      The daily price of {{name}}'s <b>{{share_type}}</b> as of <b>{{daily_price_timestamp}}</b> is <b>${{daily_price_close}}</b>
+   </div>
+
+   <h2>Value Over Time</h2>
+   The graph displays the overall share performance for {{name}}.
+   <br/>
+   <img src = "{{url_for('static', filename = 'photo/graph_monthly.png')}}" alt="Monthly Rates Graph" class = "center">
+   <br/>
+   
+</p>
+{% endblock content %}

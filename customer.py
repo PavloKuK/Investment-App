@@ -48,4 +48,4 @@ class Portfolio(Base):
     dividents = Column(Float) #The amount of dividents that have been paid out to the customer since the stock purchase
 
 Base.metadata.create_all(engine)
-   
+  
