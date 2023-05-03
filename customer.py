@@ -46,6 +46,5 @@ class Portfolio(Base):
     gains = Column(Float)   #The change in value of all companies since shares were purchased in $ amount
     returns = Column(Float) #The change in value of all companies since shares were purchased in % amount
     dividents = Column(Float) #The amount of dividents that have been paid out to the customer since the stock purchase
-
+    
 Base.metadata.create_all(engine)
-   

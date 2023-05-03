@@ -17,3 +17,4 @@ class Company:
         self.weekLow = weekLow
         self.fiftyDayMovingAverage = fiftyDayMovingAverage
         self.twoHundredDayMovingAverage = twoHundredDayMovingAverage
+        

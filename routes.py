@@ -11,17 +11,16 @@ import plotly.graph_objs as go
 import dataframe_image as dfi
 import win32api
 from objectFile import Company
+from sqlalchemy import create_engine, MetaData, Table, text
+from sqlalchemy.ext.declarative import declarative_base
 
 import ctypes  # An included library with Python install.
 
 from sqlalchemy.orm import sessionmaker
 
-from company_lookup import Lookup, Login, SignUp, BankTransfer
+from company_lookup import Lookup, Login, SignUp, BankTransfer, BuyShares
 from flask import Flask, render_template, url_for, request, redirect, jsonify, flash
 
-import tkinter as tk
-from tkinter import messagebox
-from tkinter import ttk
 
 Session = sessionmaker(bind=customer_db.engine)
 session = Session()
@@ -41,27 +40,6 @@ Password = "password"
 company = Company("", "", "", "", "", "", "", "",
                   "", "", "", "", "", "", "", "", "")
 
-# def show_popup():
-#     messagebox.showinfo("Title", "Message")
-
-# root = tk.Tk()
-# root.withdraw()
-
-def Mbox(title, text, style):
-    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
- 
-
-# def popupmsg(msg, title):
-#     root = tk.Tk()
-#     root.title(title)
-#     label = ttk.Label(root, text=msg)
-#     label.pack(side="top", fill="x", pady=10)
-#     B1 = tk.Button(root, text="Okay", command=root.destroy)
-#     B1.pack()
-#     root.attributes("-topmost", True) # This will make the window appear on top of all other windows
-#     root.after_idle(root.attributes, '-topmost', False) # This will reset the attribute after the window appears
-#     root.geometry(f"+{root.winfo_screenwidth() // 2}+{root.winfo_screenheight() // 2}") # This will make the window appear in the middle of the screen
-#     root.mainloop()
 
 @app.route("/")
 def myrediret():
@@ -86,21 +64,17 @@ def login():
                 # print(Password + Password)
 
                 if result["email"] == newLogin.email and result["password"] == newLogin.password:
-                    # print(Email + Password + Email)
-                    # win32api.MessageBox(0, 'alert', 'alert')
-                    
-                    Mbox('Login', 'Login Successful', 0)
-                  
-                  #   root.after(0, show_popup)
-                  #   root.mainloop()
-                  
-                  #   popupmsg("Hello", "Message")
-                    
+                    win32api.MessageBox(
+                        0, 'Login Successful', 'Login', 0x00001000)
                     return redirect(url_for('simple_form'))
 
+                elif result["email"] != newLogin.email or result["password"] != newLogin.password:
+                    win32api.MessageBox(
+                        0, 'Password or Email is incorect. Try again', 'Login', 0x00001000)
+                 
             except AttributeError:
-                # win32api.MessageBox(0, 'alert', 'alert', 0x00001000)
-                Mbox('Login', 'Login Successful', 0)
+                win32api.MessageBox(
+                    0, 'Password or Email is incorect. Try again', 'Login', 0x00001000)
                 print("6516565154165151611111111111111111")
                 print(AttributeError)
 
@@ -137,7 +111,8 @@ def signup():
                 newBank.bank = result["bank"]
 
                 session.commit()
-                Mbox('Profile', 'Profile changes saved successfuly', 0)
+                win32api.MessageBox(0, 'Saved Successfuly',
+                                    'Sign Up', 0x00001000)
 
         except AttributeError:
 
@@ -153,7 +128,8 @@ def signup():
                 session.add(newBank)
                 session.commit()
                 session.flush()
-                Mbox('Sinup', 'Signup Successful', 0)
+                win32api.MessageBox(0, 'Sign Up Successful',
+                                    'Sign Up', 0x00001000)
 
                 return redirect(url_for('simple_form'))
 
@@ -379,35 +355,154 @@ def simple_form():
 
 @app.route('/bank-transfer', methods=['GET', 'POST'])
 def bankTransfer():
-   form = BankTransfer()
-   
-   if form.is_submitted():
-      
-      result = request.form
-      
-      money = result["amount"]
-   
-      
-      try:
-         money = float(money)
-         
-         balance = session.query(customer_db.Balance).first()
-         
-         balance.amount = balance.amount + money
-         
-         session.commit()
-         
-         print(balance.amount)
-         
-         print("Money is a number")
-        
-      except ValueError:
-         print(ValueError)
-         print("You have to enter a number")
-            
-      print(money)
-   
-   return render_template('bank-transfer.html', title = "Bank", header = "Bank", form=form)
+    form = BankTransfer()
+
+    if form.is_submitted():
+
+        result = request.form
+
+        money = result["amount"]
+
+        try:
+            money = float(money)
+
+            balance = session.query(customer_db.Balance).first()
+
+            balance.amount = balance.amount + money
+
+            session.commit()
+
+            print(balance.amount)
+
+            print("Money is a number")
+
+        except ValueError:
+            win32api.MessageBox(
+                0, 'You have to enter a number', 'Error', 0x00001000)
+            print(ValueError)
+            print("You have to enter a number")
+
+        print(money)
+
+    return render_template('bank-transfer.html', title="Bank", header="Bank", form=form)
+
+
+@app.route('/buy_shares', methods=['GET', 'POST'])
+def buyShares():
+    form = BuyShares()
+
+    if form.is_submitted():
+
+        result = request.form
+
+        urlCsvDaily = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=' + \
+            result["name"] + "&apikey=" + key1 + "&datatype=csv"
+        companyInfo = pd.read_csv(urlCsvDaily)
+        companyInfo.to_csv('static/data/daily_adjusted.csv')
+
+        graph_table = pd.read_csv(
+            'static/data/daily_adjusted.csv', usecols=['timestamp', 'close', 'high'])
+        data = [go.Scatter(
+            x=graph_table['timestamp'],
+            y=graph_table['close'],
+        )]
+        layout = go.Layout(
+            xaxis=dict(
+                title='TimeStamps',
+            ),
+            yaxis=dict(
+                title='Share Price',
+            )
+        )
+        fig_monthly = go.Figure(data=data, layout=layout)
+        fig_monthly.write_image("static/photo/graph_monthly.png")
+        daily_price = pd.read_csv(
+            'static/data/daily_adjusted.csv', usecols=['timestamp', 'close'], nrows=1)
+        write_timestamp_close = daily_price.to_csv(
+            'static/data/daily_price.csv')
+
+        with open('static/data/daily_price.csv', 'r') as file:
+
+            for line in islice(csv.reader(file), 1, 2):
+                daily_price_timestamp = (line[1])
+                daily_price_close = float(line[2])
+
+        stock_CSV_URL = 'https://www.alphavantage.co/query?function=LISTING_STATUS&apikey=' + \
+            key3 + "&datatype=csv"
+        companyInfo = pd.read_csv(stock_CSV_URL, usecols=[
+                                  'symbol', 'name', 'assetType'])
+        companyInfo.to_csv('static/data/stock_type.csv')
+
+        df1 = pd.read_csv('static/data/stock_type.csv')
+        df2 = df1.set_index("symbol", drop=False)
+        share_type = df2.loc[result["name"], "assetType"]
+        company_name = df2.loc[result["name"], "name"]
+
+        try:
+
+            balance = session.query(customer_db.Balance).first()
+            numShares = (int)(result["numberOfShares"])
+
+            money = daily_price_close*numShares  # value
+
+            if money > balance.amount:
+                win32api.MessageBox(
+                    0, 'You do not have enough money in your bank account to make this purchase', 'Alert', 0x00001000)
+                return render_template('buy_shares_form.html', title="Company Shares", header="Company Shares", form=form)
+            else:
+                money_gain = money-daily_price_close
+
+                h1 = customer_db.Holdings(
+                    name=company_name, value=money, gain=money_gain)
+                session.add(h1)
+
+                balance.amount = balance.amount - money
+
+                session.commit()
+
+        except ValueError:
+            win32api.MessageBox(
+                0, 'You have to enter a number', 'Error', 0x00001000)
+            print(ValueError)
+            print("You have to enter a number")
+
+        money_left_after_buy = balance.amount + daily_price_close
+
+        return render_template('buy_shares.html', title=company_name + " Share Price", header=company_name + " Share Rate",
+                               result=result, share_type=share_type, daily_price=daily_price, daily_price_timestamp=daily_price_timestamp,
+                               daily_price_close="{:.2f}".format(daily_price_close), moneyAmt="{:.2f}".format(balance.amount), money_left_after_buy="{:.2f}".format(money_left_after_buy),
+                               name=company_name, form=form)
+
+    return render_template('buy_shares_form.html', title="Company Shares", header="Company Shares", form=form)
+
+
+@app.route('/user-info', methods=['GET', 'POST'])
+def userInfo():
+    user = session.query(customer_db.Account).first()
+    userBalance = session.query(customer_db.Balance).first()
+    
+    nameList = []
+    valueList = []
+
+    value = 0
+    
+    query = session.query(customer_db.Holdings)
+    results = query.all()
+    for item in results:
+       nameList.append(item.name + " $" + str(round(item.value, 3))) 
+       valueList.append(item.gain)
+       value = value + item.value
+
+    return render_template('info.html', title="Info", header="Info",
+                           name=user.name,
+                           email=user.email,
+                           bank=user.bank,
+                           address=user.address,
+                           state=user.state,
+                           balance=userBalance.amount,
+                           nameList = nameList,
+                           valueList=valueList,
+                           value=value)
 
 
 @app.route('/manuals', methods=['GET', 'POST'])

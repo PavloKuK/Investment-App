@@ -13,7 +13,7 @@
    </br>
    Profile
 
-   <table style="width:40%; margin-top:10px; margin-left:10px; font-size: 14px; background-color: #bde9ba; border: none">
+   <table id = "class" style="width:40%; margin-top:10px; margin-left:10px; font-size: 14px; background-color: #bde9ba; border: none">
       <tr>
         <td>Asset Type</td>
         <td>{{assetType}}</td>
@@ -89,5 +89,21 @@
          <td>{{beta}}</td>
        </tr>
     </table> 
+   </br>
+   </br>
+   Potential Divident Earnings
+
+   <table style="width:40%; margin-top:10px; margin-left:10px; font-size: 14px; background-color: #bde9ba; border: none">
+      <tr>
+         <td>Divident Earnings for past year</td>
+         <td>${{dividentIncome}}</td>
+      </tr>
+      <tr>
+         <td>Income for 100 shares</td>
+         <td>${{hundredShares}}</td>
+       </tr>
+   </table>
+
+
 </div>
 {% endblock content %}

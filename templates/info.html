@@ -1,0 +1,33 @@
+{% extends "datatable_layout.html" %}
+
+{% block title %} {{title}}  {% endblock title %}
+{% block header %} {{header}}  {% endblock header %}
+
+{% block content %} 
+
+
+    <h1>Account</h1>
+
+    <div>
+        <h2>Account info</h2>
+        {{name}} <br/>
+        {{email}}<br/>
+        {{bank}}<br/>
+        {{address}}<br/>
+        {{state}}<br/><br/>
+
+        Current account balance is ${{balance}}
+    </div>
+
+    <div>
+        <h2>Holdings</h2>
+        <span>The total value of the portfolio is ${{value}}</span>
+
+        <br/>
+        <br/>
+        {% for item in nameList %}
+            {{item}}<br/>
+        {% endfor %}
+    </div>
+
+{% endblock content %}
